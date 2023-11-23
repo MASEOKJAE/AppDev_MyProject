@@ -1,5 +1,8 @@
 import 'package:finalterm_project/model/product_repository.dart';
+import 'package:finalterm_project/model/user.dart';
 import 'package:finalterm_project/model/user_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // new
 
@@ -11,121 +14,141 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String dropdownValue = 'ASC';
+  User? user = FirebaseAuth.instance.currentUser;
 
-  Widget _buildGridCards(BuildContext context) {
-    final isAscending = dropdownValue != 'DESC';
+  final List<String> entries = <String>[
+    '즐겨찾기',
+    '제1열람실',
+  ];
+  final List<int> colorCodes = <int>[600, 500, 100, 600, 500, 100];
 
-    return Consumer<UserRepository>(builder: (context, user, child) {
-      return Consumer<ProductRepository>(
-        builder: (context, product, child) {
-          return GridView(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // 한 행에 두 개의 항목 표시
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+  Widget _firstlistBuild(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      itemCount: entries.length,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(context,
+                '/${entries[index]}'); // change the route name accordingly
+          },
+          child: Container(
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.amber[colorCodes[index %
+                  3]], // colorCodes index is calculated as modulus of 3 to prevent out of range error
+              borderRadius: BorderRadius.circular(10.0), // Add this
+            ), // colorCodes index is calculated as modulus of 3 to prevent out of range error
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('${entries[index]}'),
+              ),
             ),
-            children: product.getSortedList(isAscending).map((p) {
-              return Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        AspectRatio(
-                          aspectRatio: 18 / 11,
-                          child: Image.network(
-                            p.image!,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        if (user.isInWishlist(p.id!))
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Icon(
-                            Icons.check_circle,
-                            color: Colors.blue[800],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          p.name,
-                                          style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold),
-                                          maxLines: 1,
-                                        ),
-                                        const SizedBox(height: 2.0),
-                                        Text(
-                                          '\$ ${p.price}',
-                                          style: const TextStyle(fontSize: 10),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/detail',
-                                  arguments: p,
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 2),
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: const Text('more'),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) =>
+          const Divider(height: 30),
+    );
+  }
+
+  Widget _secondlistBuild(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 20.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/제2열람실');
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  // add this
+                  borderRadius: BorderRadius.circular(
+                      10.0), // change this to adjust the radius
                 ),
-              );
-            }).toList(),
-          );
-        },
-      );
-    });
+                child: Container(
+                  height: 280,
+                  decoration: BoxDecoration(
+                    color: Colors.amber[600],
+                    borderRadius: BorderRadius.circular(
+                        10.0), // change this to adjust the radius
+                  ),
+                  child: const Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('제2열람실'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              children: [     
+                _buildListItem(context, '노트북 열람실', Colors.amber),
+                const SizedBox(
+                  height: 10,
+                ),
+                _buildListItem(context, '제5열람실', Colors.amber),
+                const SizedBox(
+                  height: 10,
+                ),
+                _buildListItem(context, 'SW 플라자', Colors.amber),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, String title, Color color) {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/$title');
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          // add this
+          borderRadius:
+              BorderRadius.circular(10.0), // change this to adjust the radius
+        ),
+        child: Container(
+          height: 80,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius:
+                BorderRadius.circular(10.0), // change this to adjust the radius
+          ),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(title),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
+        title: const Text('Home'),
         centerTitle: true,
         backgroundColor: Colors.grey.shade600,
         iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
           icon: const Icon(
-            Icons.person,
+            Icons.account_circle_rounded,
             semanticLabel: 'profile',
             color: Colors.white,
           ),
@@ -134,16 +157,16 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.shopping_cart,
-              semanticLabel: 'cart',
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/wishlist');
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(
+          //     Icons.shopping_cart,
+          //     semanticLabel: 'cart',
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/wishlist');
+          //   },
+          // ),
           IconButton(
             icon: const Icon(
               Icons.add,
@@ -158,31 +181,40 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 25, 0, 0), // 여기서 상단 패딩 크기 조절 가능
+            child: Align(
+              alignment: Alignment.topLeft, // 좌측 정렬
+              child: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: user?.displayName ?? 'Guest',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    const TextSpan(
+                      text: ' 님\n환영합니다 :)',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           const SizedBox(
             height: 30,
           ),
-          DropdownButton<String>(
-            value: dropdownValue,
-            items: <String>['ASC', 'DESC'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(
-                  () {
-                    dropdownValue = newValue;
-                  },
-                );
-              }
-            },
-          ),
           const SizedBox(
             height: 30,
           ),
-          Expanded(child: _buildGridCards(context)),
+          Expanded(child: _firstlistBuild(context)),
+          Expanded(child: _secondlistBuild(context)),
         ],
       ),
     );
