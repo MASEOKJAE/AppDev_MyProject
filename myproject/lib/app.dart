@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'view/home.dart';
 import 'view/login.dart';
-// import 'view/profile.dart';
+import 'view/profile.dart';
 // import 'view/add.dart';
 // import 'view/detail.dart';
 // import 'view/modify.dart';
@@ -21,7 +21,7 @@ class StudyApp extends StatelessWidget {
         '/login': (BuildContext context) => const LoginPage(),
         '/': (BuildContext context) => const HomePage(),
         // '/add': (BuildContext context) => const AddPage(),
-        // '/profile': (BuildContext context) => const Profile(),
+        '/profile': (BuildContext context) => const Profile(),
         // '/detail': (BuildContext context) => const DetailPage(),
         // '/modify': (BuildContext context) => const ModifyPage(),
         // '/wishlist': (BuildContext context) => const WishListPage(),

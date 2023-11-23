@@ -157,16 +157,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: <Widget>[
-          // IconButton(
-          //   icon: const Icon(
-          //     Icons.shopping_cart,
-          //     semanticLabel: 'cart',
-          //     color: Colors.white,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, '/wishlist');
-          //   },
-          // ),
           IconButton(
             icon: const Icon(
               Icons.add,
