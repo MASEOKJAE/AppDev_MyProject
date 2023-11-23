@@ -1,6 +1,6 @@
-// import 'package:finalterm_project/firebase_options.dart';
-// import 'package:finalterm_project/model/product_repository.dart';
-// import 'package:finalterm_project/model/user_repository.dart';
+import 'package:finalterm_project/firebase_options.dart';
+import 'package:finalterm_project/model/product_repository.dart';
+import 'package:finalterm_project/model/user_repository.dart';
 import 'package:finalterm_project/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -19,8 +19,8 @@ void main() async {
   runApp(
     MultiProvider(
     providers: [
-      // ChangeNotifierProvider(create: (_) => ProductRepository()),
-      // ChangeNotifierProvider(create: (_) => UserRepository()),
+      ChangeNotifierProvider(create: (_) => ProductRepository()),
+      ChangeNotifierProvider(create: (_) => UserRepository()),
     ],
     builder: ((context, child) => const StudyApp()),
   ));

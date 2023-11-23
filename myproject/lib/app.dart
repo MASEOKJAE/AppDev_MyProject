@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// import 'view/home.dart';
-// import 'view/login.dart';
+import 'view/home.dart';
+import 'view/login.dart';
 // import 'view/profile.dart';
 // import 'view/add.dart';
 // import 'view/detail.dart';
@@ -18,8 +18,8 @@ class StudyApp extends StatelessWidget {
       title: '',
       initialRoute: '/login',
       routes: {
-        // '/login': (BuildContext context) => const LoginPage(),
-        // '/': (BuildContext context) => const HomePage(),
+        '/login': (BuildContext context) => const LoginPage(),
+        '/': (BuildContext context) => const HomePage(),
         // '/add': (BuildContext context) => const AddPage(),
         // '/profile': (BuildContext context) => const Profile(),
         // '/detail': (BuildContext context) => const DetailPage(),
