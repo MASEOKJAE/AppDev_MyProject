@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'view/home.dart';
 import 'view/login.dart';
 import 'view/profile.dart';
-// import 'view/add.dart';
-// import 'view/detail.dart';
-// import 'view/modify.dart';
+import 'view/space/favorite.dart';
+import 'view/space/room_1.dart';
+import 'view/space/room_2.dart';
+import 'view/space/room_laptop.dart';
+import 'view/space/room_5.dart';
+import 'view/space/room_sw.dart';
 // import 'view/wishlist.dart';
 
 // TODO: Convert ShrineApp to stateful widget (104)
@@ -20,10 +23,13 @@ class StudyApp extends StatelessWidget {
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
         '/': (BuildContext context) => const HomePage(),
-        // '/add': (BuildContext context) => const AddPage(),
         '/profile': (BuildContext context) => const Profile(),
-        // '/detail': (BuildContext context) => const DetailPage(),
-        // '/modify': (BuildContext context) => const ModifyPage(),
+        '/favorite': (BuildContext context) => const FavoritePage(),
+        '/room1': (BuildContext context) => const Room1Page(),
+        '/room2': (BuildContext context) => const Room2Page(),
+        '/roomlaptop': (BuildContext context) => const RoomLaptopPage(),
+        '/room5': (BuildContext context) => const Room5Page(),
+        '/roomsw': (BuildContext context) => const RoomSwPage(),
         // '/wishlist': (BuildContext context) => const WishListPage(),
       },
       // TODO: Customize the theme (103)

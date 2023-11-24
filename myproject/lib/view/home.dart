@@ -29,8 +29,11 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
-            Navigator.pushNamed(context,
-                '/${entries[index]}'); // change the route name accordingly
+            if (entries[index] == '즐겨찾기') {
+              Navigator.pushNamed(context, '/favorite');
+            } else if (entries[index] == '제1열람실') {
+              Navigator.pushNamed(context, '/room1');
+            }
           },
           child: Container(
             height: 120,
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, '/제2열람실');
+                Navigator.pushNamed(context, '/room2');
               },
               child: Card(
                 shape: RoundedRectangleBorder(
@@ -90,16 +93,16 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: ListView(
-              children: [     
-                _buildListItem(context, '노트북 열람실', Colors.amber),
+              children: [
+                _buildListItem(context, '노트북 열람실', Colors.amber, '/roomlaptop'),
                 const SizedBox(
                   height: 10,
                 ),
-                _buildListItem(context, '제5열람실', Colors.amber),
+                _buildListItem(context, '제5열람실', Colors.amber, '/room5'),
                 const SizedBox(
                   height: 10,
                 ),
-                _buildListItem(context, 'SW 플라자', Colors.amber),
+                _buildListItem(context, 'SW 플라자', Colors.amber, '/roomsw'),
               ],
             ),
           ),
@@ -108,10 +111,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildListItem(BuildContext context, String title, Color color) {
+  Widget _buildListItem(BuildContext context, String title, Color color, String route) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/$title');
+        Navigator.pushNamed(context, route);
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -172,7 +175,8 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 25, 0, 0), // 여기서 상단 패딩 크기 조절 가능
+            padding:
+                const EdgeInsets.fromLTRB(15, 25, 0, 0), // 여기서 상단 패딩 크기 조절 가능
             child: Align(
               alignment: Alignment.topLeft, // 좌측 정렬
               child: RichText(
