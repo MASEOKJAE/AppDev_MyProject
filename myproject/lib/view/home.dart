@@ -70,8 +70,7 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 shape: RoundedRectangleBorder(
                   // add this
-                  borderRadius: BorderRadius.circular(
-                      10.0), // change this to adjust the radius
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Container(
                   height: 280,
@@ -111,7 +110,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildListItem(BuildContext context, String title, Color color, String route) {
+  Widget _buildListItem(
+      BuildContext context, String title, Color color, String route) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, route);
