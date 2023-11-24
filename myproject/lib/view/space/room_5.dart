@@ -19,7 +19,10 @@ class _Room5State extends State<Room5Page> {
   
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('room 5'),
+      )
+   );
   }
 }
