@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.contain,
               ),
               const SizedBox(
-                height: 20,
+                height: 50,
               ),
               const Text(
                 'A Space Ignited by \nthe Passion for Learning',

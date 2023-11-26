@@ -171,7 +171,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Container(
-                      height: 200,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: MyColorTheme.primary.withOpacity(.3),
                         borderRadius: BorderRadius.circular(
@@ -211,7 +211,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Container(
-                      height: 200,
+                      height: 150,
                       decoration: BoxDecoration(
                         color: MyColorTheme.primary.withOpacity(.3),
                         borderRadius: BorderRadius.circular(

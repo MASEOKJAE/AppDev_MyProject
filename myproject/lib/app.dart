@@ -1,5 +1,4 @@
 import 'package:myproject/config/theme.dart';
-import 'package:myproject/view/space/room.dart';
 import 'package:flutter/material.dart';
 
 import 'view/home.dart';
@@ -7,6 +6,7 @@ import 'view/login.dart';
 import 'view/profile.dart';
 import 'view/setting.dart';
 import 'view/space/favorite.dart';
+import 'package:myproject/view/space/room_check.dart';
 
 // import 'view/wishlist.dart';
 

@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.pushNamed(context, '/favorite');
             },
-            child: Row(
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
@@ -89,8 +89,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildCard(context, title: '제1열람실', onPressed: () {
-            Navigator.pushNamed(context, '/room1');
+          _buildCard(context, title: '제 1열람실', onPressed: () {
+            Navigator.pushNamed(context, '/room', arguments: FirstRoom());
           }),
           const SizedBox(height: 20),
           Row(
@@ -99,10 +99,10 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: _buildCard(
                   context,
-                  title: '제2열람실',
+                  title: '제 2열람실',
                   isPortrait: true,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/room2');
+                    Navigator.pushNamed(context, '/room', arguments: SecondRoom());
                   },
                 ),
               ),
@@ -114,12 +114,12 @@ class _HomePageState extends State<HomePage> {
                       Navigator.pushNamed(context, '/room', arguments: LaptopRoom());
                     }),
                     const SizedBox(height: 20),
-                    _buildCard(context, title: '제5열람실', onPressed: () {
-                      Navigator.pushNamed(context, '/room5');
+                    _buildCard(context, title: '제 5열람실', onPressed: () {
+                      Navigator.pushNamed(context, '/room', arguments: FifthRoom());
                     }),
                     const SizedBox(height: 20),
                     _buildCard(context, title: 'SW 플라자', onPressed: () {
-                      Navigator.pushNamed(context, '/roomsw');
+                      Navigator.pushNamed(context, '/room', arguments: SwRoom());
                     }),
                   ],
                 ),
