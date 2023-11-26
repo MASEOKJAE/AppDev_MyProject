@@ -1,3 +1,5 @@
+import 'package:finalterm_project/config/theme.dart';
+import 'package:finalterm_project/view/space/room.dart';
 import 'package:flutter/material.dart';
 
 import 'view/home.dart';
@@ -25,15 +27,20 @@ class StudyApp extends StatelessWidget {
         '/': (BuildContext context) => const HomePage(),
         '/profile': (BuildContext context) => const Profile(),
         '/favorite': (BuildContext context) => const FavoritePage(),
-        '/room1': (BuildContext context) => const Room1Page(),
-        '/room2': (BuildContext context) => const Room2Page(),
-        '/roomlaptop': (BuildContext context) => const RoomLaptopPage(),
-        '/room5': (BuildContext context) => const Room5Page(),
-        '/roomsw': (BuildContext context) => const RoomSwPage(),
+        '/room': (BuildContext context) => const RoomPage(),
+        // '/room1': (BuildContext context) => const Room1Page(),
+        // '/room2': (BuildContext context) => const Room2Page(),
+        // '/roomlaptop': (BuildContext context) => const RoomLaptopPage(),
+        // '/room5': (BuildContext context) => const Room5Page(),
+        // '/roomsw': (BuildContext context) => const RoomSwPage(),
         // '/wishlist': (BuildContext context) => const WishListPage(),
       },
-      // TODO: Customize the theme (103)
-      theme: ThemeData.light(useMaterial3: false),
+      theme: ThemeData(
+        useMaterial3: false,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: MyColorTheme.primary,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
