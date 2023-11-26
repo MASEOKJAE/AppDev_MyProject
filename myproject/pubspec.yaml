@@ -1,4 +1,4 @@
-name: finalterm_project
+name: myproject
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -24,6 +24,7 @@ dependencies:
   cached_network_image: ^3.3.0
   image_picker: ^1.0.4
   firebase_storage: ^11.5.0
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -33,4 +34,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/hguLogo.png
+    - assets/mainLogo.svg

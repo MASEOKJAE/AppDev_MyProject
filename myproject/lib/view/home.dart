@@ -1,5 +1,5 @@
-import 'package:finalterm_project/config/theme.dart';
-import 'package:finalterm_project/model/room.dart';
+import 'package:myproject/config/theme.dart';
+import 'package:myproject/model/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -131,128 +131,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _firstlistBuild(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-      itemCount: entries.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () {
-            if (entries[index] == '즐겨찾기') {
-              Navigator.pushNamed(context, '/favorite');
-            } else if (entries[index] == '제1열람실') {
-              Navigator.pushNamed(context, '/room1');
-            }
-          },
-          child: Container(
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.amber[colorCodes[index %
-                  3]], // colorCodes index is calculated as modulus of 3 to prevent out of range error
-              borderRadius: BorderRadius.circular(10.0), // Add this
-            ), // colorCodes index is calculated as modulus of 3 to prevent out of range error
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('${entries[index]}'),
-              ),
-            ),
-          ),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) =>
-          const Divider(height: 30),
-    );
-  }
-
-  Widget _secondlistBuild(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 20.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/room2');
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  // add this
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Container(
-                  height: 280,
-                  decoration: BoxDecoration(
-                    color: Colors.amber[600],
-                    borderRadius: BorderRadius.circular(
-                        10.0), // change this to adjust the radius
-                  ),
-                  child: const Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('제2열람실'),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: [
-                _buildListItem(context, '노트북 열람실', Colors.amber, '/roomlaptop'),
-                const SizedBox(
-                  height: 10,
-                ),
-                _buildListItem(context, '제5열람실', Colors.amber, '/room5'),
-                const SizedBox(
-                  height: 10,
-                ),
-                _buildListItem(context, 'SW 플라자', Colors.amber, '/roomsw'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildListItem(
-      BuildContext context, String title, Color color, String route) {
-    return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, route);
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          // add this
-          borderRadius:
-              BorderRadius.circular(10.0), // change this to adjust the radius
-        ),
-        child: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius:
-                BorderRadius.circular(10.0), // change this to adjust the radius
-          ),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(title),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildDrawerTile(BuildContext context, int index) {
     List<String> titles = ['홈', '즐겨찾기', '프로필', '설정'];
-    List<String> routes = ['/', '/favorite', '/profile', '/settings'];
+    List<String> routes = ['/', '/favorite', '/profile', '/setting'];
     List<IconData> icons = [
       Icons.home,
       Icons.star,

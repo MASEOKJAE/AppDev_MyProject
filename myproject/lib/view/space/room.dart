@@ -1,5 +1,5 @@
-import 'package:finalterm_project/config/theme.dart';
-import 'package:finalterm_project/model/room.dart';
+import 'package:myproject/config/theme.dart';
+import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 
 class RoomPage extends StatefulWidget {

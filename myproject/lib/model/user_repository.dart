@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finalterm_project/model/user.dart';
+import 'package:myproject/model/user.dart';
 import 'package:flutter/material.dart';
 
 class UserRepository extends ChangeNotifier {

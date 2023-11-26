@@ -1,8 +1,7 @@
+import 'package:myproject/config/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finalterm_project/model/user.dart';
-import 'package:finalterm_project/model/user_repository.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -13,21 +12,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   User? user = FirebaseAuth.instance.currentUser;
-  UserModel? _user;
-  final UserRepository _userRepository = UserRepository();
-
-  @override
-  void initState() {
-    super.initState();
-    fetchUserInfo();
-  }
-
-  void fetchUserInfo() async {
-    await _userRepository.loadAllFromDatabase();
-    setState(() {
-      _user = _userRepository.getUser(user!.uid);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +20,14 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Profile'),
+        centerTitle: true,
         // backgroundColor: Colors.black,
         actions: [
           IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(context, '/login');
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/setting');
             },
           ),
         ],
@@ -188,7 +173,7 @@ class _ProfileState extends State<Profile> {
                     child: Container(
                       height: 200,
                       decoration: BoxDecoration(
-                        color: Colors.amber[600],
+                        color: MyColorTheme.primary.withOpacity(.3),
                         borderRadius: BorderRadius.circular(
                             10.0), // change this to adjust the radius
                       ),
@@ -196,7 +181,6 @@ class _ProfileState extends State<Profile> {
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('제2열람실'),
                         ),
                       ),
                     ),
@@ -229,7 +213,7 @@ class _ProfileState extends State<Profile> {
                     child: Container(
                       height: 200,
                       decoration: BoxDecoration(
-                        color: Colors.amber[600],
+                        color: MyColorTheme.primary.withOpacity(.3),
                         borderRadius: BorderRadius.circular(
                             10.0), // change this to adjust the radius
                       ),
@@ -237,7 +221,6 @@ class _ProfileState extends State<Profile> {
                         alignment: Alignment.topLeft,
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('제2열람실'),
                         ),
                       ),
                     ),

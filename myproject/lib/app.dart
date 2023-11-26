@@ -1,16 +1,13 @@
-import 'package:finalterm_project/config/theme.dart';
-import 'package:finalterm_project/view/space/room.dart';
+import 'package:myproject/config/theme.dart';
+import 'package:myproject/view/space/room.dart';
 import 'package:flutter/material.dart';
 
 import 'view/home.dart';
 import 'view/login.dart';
 import 'view/profile.dart';
+import 'view/setting.dart';
 import 'view/space/favorite.dart';
-import 'view/space/room_1.dart';
-import 'view/space/room_2.dart';
-import 'view/space/room_laptop.dart';
-import 'view/space/room_5.dart';
-import 'view/space/room_sw.dart';
+
 // import 'view/wishlist.dart';
 
 // TODO: Convert ShrineApp to stateful widget (104)
@@ -27,12 +24,8 @@ class StudyApp extends StatelessWidget {
         '/': (BuildContext context) => const HomePage(),
         '/profile': (BuildContext context) => const Profile(),
         '/favorite': (BuildContext context) => const FavoritePage(),
-        '/room': (BuildContext context) => const RoomPage(),
-        // '/room1': (BuildContext context) => const Room1Page(),
-        // '/room2': (BuildContext context) => const Room2Page(),
-        // '/roomlaptop': (BuildContext context) => const RoomLaptopPage(),
-        // '/room5': (BuildContext context) => const Room5Page(),
-        // '/roomsw': (BuildContext context) => const RoomSwPage(),
+        '/setting': (BuildContext context) => const SettingPage(),
+        '/room': (BuildContext context) => const RoomPage(),       
         // '/wishlist': (BuildContext context) => const WishListPage(),
       },
       theme: ThemeData(

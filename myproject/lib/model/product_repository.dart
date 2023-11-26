@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:finalterm_project/model/product.dart';
-import 'package:finalterm_project/model/user_repository.dart';
+import 'package:myproject/model/product.dart';
+import 'package:myproject/model/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class ProductRepository extends ChangeNotifier {

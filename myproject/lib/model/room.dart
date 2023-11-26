@@ -1,4 +1,4 @@
-import 'package:finalterm_project/model/seat.dart';
+import 'package:myproject/model/seat.dart';
 import 'package:flutter/material.dart';
 
 abstract class Room {
