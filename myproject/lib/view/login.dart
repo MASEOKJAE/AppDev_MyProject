@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(100.0, 50.0, 100.0, 100.0),
+          padding: const EdgeInsets.fromLTRB(70.0, 50.0, 70.0, 100.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -117,10 +117,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(MyColorTheme.primary.withOpacity(0.5)),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    Color.alphaBlend(
+                      MyColorTheme.primary.withOpacity(0.9),
+                      Colors.white,
+                    ),
+                  ),
                   minimumSize: MaterialStateProperty.all<Size>(
-                      const Size(200, 50)), // 버튼의 최소 크기 설정
+                      const Size(200, 60)), // 버튼의 최소 크기 설정
                 ),
                 onPressed: () async {
                   await signInWithGoogle();
@@ -128,7 +132,22 @@ class _LoginPageState extends State<LoginPage> {
                       .loadAllFromDatabase();
                   Navigator.pushReplacementNamed(context, '/');
                 },
-                child: const Text('Google Login'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/google.svg',
+                        width: 30, height: 30),
+                    const SizedBox(width: 20),
+                    const Text(
+                      'Login in with Google',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
