@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/config/theme.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 import 'package:myproject/model/seat.dart';
+import 'package:myproject/model/room_repository.dart';
+import 'package:provider/provider.dart';
 
 class RoomPage extends StatefulWidget {
   const RoomPage({super.key});
@@ -14,11 +17,15 @@ class _RoomPageState extends State<RoomPage> {
   late Room room;
   int? selectedSeatIndex;
   Seat? get selectedSeat => room.getSeat(selectedSeatIndex);
+  String? selectedUserEmail;
+  late RoomRepository roomRepository;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     room = ModalRoute.of(context)!.settings.arguments as Room;
+    roomRepository = Provider.of<RoomRepository>(context);
+    roomRepository.loadAllFromDatabase();
     setState(() {});
   }
 
@@ -43,13 +50,26 @@ class _RoomPageState extends State<RoomPage> {
               room.size.width.toInt(),
               (j) => GestureDetector(
                 onTap: room.seats[i][j].exist
-                    ? () {
+                    ? () async {
                         int index = room.seats[i][j].index;
+                        DocumentSnapshot seatSnapshot = await FirebaseFirestore
+                            .instance
+                            .collection(room.name)
+                            .doc(index.toString())
+                            .get();
+                        String userEmail = 'Guest';
+                        if (seatSnapshot.exists) {
+                          userEmail = (seatSnapshot.data()
+                                  as Map<String, dynamic>)['email'] ??
+                              'Guest';
+                        }
                         setState(() {
                           if (index == selectedSeatIndex) {
                             selectedSeatIndex = null;
+                            selectedUserEmail = null;
                           } else {
                             selectedSeatIndex = index;
+                            selectedUserEmail = userEmail;
                           }
                         });
                       }
@@ -143,9 +163,9 @@ class _RoomPageState extends State<RoomPage> {
                   ),
                 ),
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: <TextSpan>[
-                      TextSpan(
+                      const TextSpan(
                         text: '사용자: ',
                         style: TextStyle(
                           color: Colors.black,
@@ -154,8 +174,8 @@ class _RoomPageState extends State<RoomPage> {
                         ),
                       ),
                       TextSpan(
-                        text: 'Guest',
-                        style: TextStyle(
+                        text: selectedUserEmail ?? 'Guest',
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
                         ),
@@ -179,6 +199,8 @@ class _RoomPageState extends State<RoomPage> {
                           ),
                           onPressed: () {
                             selectedSeat?.using = true;
+                            roomRepository.addOneToDatabase(
+                                room, selectedSeatIndex!);
                             setState(() {});
                           },
                           child: const Text('사용'),

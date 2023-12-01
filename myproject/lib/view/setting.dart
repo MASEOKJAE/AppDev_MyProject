@@ -10,6 +10,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingState extends State<SettingPage> {
+  bool _isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,20 +35,84 @@ class _SettingState extends State<SettingPage> {
           children: [
             Card(
               shape: RoundedRectangleBorder(
-                // add this
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Container(
-                height: 200,
+                height: 100,
                 decoration: BoxDecoration(
                   color: MyColorTheme.primary.withOpacity(.3),
-                  borderRadius: BorderRadius.circular(
-                      10.0), // change this to adjust the radius
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: const Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text('다크 모드', style: TextStyle(fontSize: 20)),
+                      ),
+                      Switch(
+                        value: _isSwitched,
+                        onChanged: (value) {
+                          setState(() {
+                            _isSwitched = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: MyColorTheme.primary.withOpacity(.3),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('이용 약관', style: TextStyle(fontSize: 20)),
+                          SizedBox(height: 10.0),
+                          Text('이용 약관의 세부사항...'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  color: MyColorTheme.primary.withOpacity(.3),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                     Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('소프트웨어 버전', style: TextStyle(fontSize: 20)),
+                          SizedBox(height: 10.0),
+                          Text('ver 0.0.5'),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

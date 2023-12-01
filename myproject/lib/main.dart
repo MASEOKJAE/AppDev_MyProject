@@ -1,5 +1,5 @@
 import 'package:myproject/firebase_options.dart';
-import 'package:myproject/model/product_repository.dart';
+import 'package:myproject/model/room_repository.dart';
 import 'package:myproject/model/user_repository.dart';
 import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ void main() async {
   runApp(
     MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => ProductRepository()),
+      ChangeNotifierProvider(create: (_) => RoomRepository()),
       ChangeNotifierProvider(create: (_) => UserRepository()),
     ],
     builder: ((context, child) => const StudyApp()),

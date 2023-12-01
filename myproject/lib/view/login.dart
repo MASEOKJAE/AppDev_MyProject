@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/config/theme.dart';
-import 'package:myproject/model/product_repository.dart';
+import 'package:myproject/model/room_repository.dart';
 import 'package:myproject/model/user.dart';
 import 'package:myproject/model/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   await signInWithGoogle();
-                  await Provider.of<ProductRepository>(context, listen: false)
+                  await Provider.of<RoomRepository>(context, listen: false)
                       .loadAllFromDatabase();
                   Navigator.pushReplacementNamed(context, '/');
                 },
