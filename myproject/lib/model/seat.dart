@@ -1,16 +1,18 @@
+import 'package:myproject/model/user.dart';
+
 class Seat {
   late int index;
   late bool exist;
-  bool using = false;
-  String userEmail = '?';
+  String? userEmail;
+
+  bool get using => userEmail != null;
 
   Seat.empty() { 
     index = 0; 
-    exist = false; 
-    userEmail = '?';
+    exist = false;
   }
-  Seat(this.index, {this.exist = false, this.userEmail = '?'});
+  Seat(this.index, {this.exist = false, this.userEmail});
 
-  void use() => using = true;
-  void leave() => using = false;
+  void use(UserModel user) => userEmail = user.email;
+  void leave() => userEmail = null;
 }

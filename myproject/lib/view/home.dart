@@ -16,22 +16,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
 
-  final List<String> entries = <String>[
-    '즐겨찾기',
-    '제1열람실',
-  ];
-  final List<int> colorCodes = <int>[600, 500, 100, 600, 500, 100];
-
-  Widget _buildCard(
-    BuildContext context, {
-    required String title,
-    TextStyle titleStyle = const TextStyle(),
-    Widget? child,
-    VoidCallback? onPressed,
-    bool isPortrait = false,
-  }) {
+  Widget _buildRoomCard(BuildContext context, Room room) {
     double height = 110;
-    if (isPortrait) height = height * 3 + 40;
+
+    if (room.name == '제 2열람실') height = height * 3 + 40;
 
     return SizedBox(
       width: double.infinity,
@@ -44,7 +32,9 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(10),
         elevation: 2,
         child: InkWell(
-          onTap: onPressed,
+          onTap: () {
+            Navigator.of(context).pushNamed('/room', arguments: room);
+          },
           borderRadius: BorderRadius.circular(10),
           highlightColor: Colors.black.withOpacity(.1),
           splashColor: Colors.black.withOpacity(.1),
@@ -54,11 +44,41 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
-                  style: titleStyle,
+                  room.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
                 ),
                 const SizedBox(height: 20),
-                if (child != null) child,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('사용 가능'),
+                          Text(
+                            '10',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('전체 자리'),
+                          Text(
+                            '${room.offsets.length}',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -71,204 +91,24 @@ class _HomePageState extends State<HomePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildCard(
-            context,
-            title: '즐겨찾기',
-            titleStyle: const TextStyle(
-              // 'titleStyle' 파라미터에 원하는 스타일 설정
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/favorite');
-            },
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Text('사용 가능'),
-                    Text('8'),
-                  ],
-                ),
-                SizedBox(width: 50),
-                Column(
-                  children: [
-                    Text('전체 자리'),
-                    Text('15'),
-                  ],
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 20),
-          _buildCard(
-            context,
-            title: '제 1열람실',
-            titleStyle: const TextStyle(
-              // 'titleStyle' 파라미터에 원하는 스타일 설정
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/room', arguments: FirstRoom());
-            },
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Text('사용 가능'),
-                    Text('8'),
-                  ],
-                ),
-                SizedBox(width: 20),
-                Column(
-                  children: [
-                    Text('전체 자리'),
-                    Text('6'),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          _buildRoomCard(context, FirstRoom()),
           const SizedBox(height: 20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: _buildCard(
-                  context,
-                  title: '제 2열람실',
-                  titleStyle: const TextStyle(
-                    // 'titleStyle' 파라미터에 원하는 스타일 설정
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  isPortrait: true,
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/room',
-                        arguments: SecondRoom());
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Text('사용 가능'),
-                          Text('8'),
-                        ],
-                      ),
-                      SizedBox(width: 20),
-                      Column(
-                        children: [
-                          Text('전체 자리'),
-                          Text('6'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                child: _buildRoomCard(context, SecondRoom()),
               ),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
                   children: [
-                    _buildCard(
-                      context,
-                      title: '노트북 열람실',
-                      titleStyle: const TextStyle(
-                        // 'titleStyle' 파라미터에 원하는 스타일 설정
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/room',
-                            arguments: LaptopRoom());
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Text('사용 가능'),
-                              Text('8'),
-                            ],
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            children: [
-                              Text('전체 자리'),
-                              Text('6'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildRoomCard(context, LaptopRoom()),
                     const SizedBox(height: 20),
-                    _buildCard(
-                      context,
-                      title: '제 5열람실',
-                      titleStyle: const TextStyle(
-                        // 'titleStyle' 파라미터에 원하는 스타일 설정
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/room',
-                            arguments: FifthRoom());
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Text('사용 가능'),
-                              Text('8'),
-                            ],
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            children: [
-                              Text('전체 자리'),
-                              Text('6'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildRoomCard(context, FifthRoom()),
                     const SizedBox(height: 20),
-                    _buildCard(
-                      context,
-                      title: 'SW 플라자',
-                      titleStyle: const TextStyle(
-                        // 'titleStyle' 파라미터에 원하는 스타일 설정
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/room',
-                            arguments: SwRoom());
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Text('사용 가능'),
-                              Text('8'),
-                            ],
-                          ),
-                          SizedBox(width: 20),
-                          Column(
-                            children: [
-                              Text('전체 자리'),
-                              Text('6'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildRoomCard(context, SwRoom()),
                   ],
                 ),
               ),
@@ -369,7 +209,70 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/favorite');
+              },
+              borderRadius: BorderRadius.circular(10),
+              highlightColor: Colors.black.withOpacity(.1),
+              splashColor: Colors.black.withOpacity(.1),
+              child: Material(
+                // 추가
+                color: Colors.transparent,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      color: MyColorTheme.primary.withOpacity(.3),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            '즐겨찾기',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text('사용 가능'),
+                                Text(
+                                  '8',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: 50),
+                            Column(
+                              children: [
+                                Text('전체 자리'),
+                                Text(
+                                  '15',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Expanded(child: _buildCards(context)),
           ],
         ),

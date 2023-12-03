@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/config/theme.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +34,9 @@ class _RoomPageState extends State<RoomPage> {
     userRepository = Provider.of<UserRepository>(context, listen: false);
     room = ModalRoute.of(context)!.settings.arguments as Room;
     room = roomRepository.getRoom(room.name);
-    isUserUsingSeat = room.seats.any((row) => row.any((seat) =>
-        seat.using && seat.userEmail == UserRepository.user!.email));
+    isUserUsingSeat = room.seats.any((row) => row.any(
+        (seat) => seat.using && seat.userEmail == UserRepository.user!.email));
+    roomRepository.updateSeats(room);
   }
 
   Widget _buildSeatsWidget(BuildContext context) {
@@ -62,28 +62,13 @@ class _RoomPageState extends State<RoomPage> {
                 onTap: room.seats[i][j].exist
                     ? () async {
                         int index = room.seats[i][j].index;
-                        DocumentSnapshot seatSnapshot = await FirebaseFirestore
-                            .instance
-                            .collection(room.name)
-                            .doc(index.toString())
-                            .get();
-                        String userEmail = 'Guest';
-                        if (seatSnapshot.exists) {
-                          userEmail = (seatSnapshot.data()
-                                  as Map<String, dynamic>)['email'] ??
-                              'Guest';
-                          bool using = (seatSnapshot.data()
-                                  as Map<String, dynamic>)['seatState'] ??
-                              false;
-                          room.seats[i][j].using = using;
-                        }
                         setState(() {
                           if (index == selectedSeatIndex) {
                             selectedSeatIndex = null;
                             selectedUserEmail = null;
                           } else {
                             selectedSeatIndex = index;
-                            selectedUserEmail = userEmail;
+                            selectedUserEmail = room.seats[i][j].userEmail;
                           }
                         });
                       }
@@ -201,20 +186,8 @@ class _RoomPageState extends State<RoomPage> {
                     ? (selectedUserEmail == UserRepository.user!.email
                         ? Center(
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.9),
-                                ),
-                                minimumSize: MaterialStateProperty.all<Size>(
-                                    const Size(100, 40)), // 버튼 최소 크기 설정
-                              ),
+                              // ...
                               onPressed: () {
-                                print(isUserUsingSeat);
-                                selectedSeat?.using = false;
-                                selectedSeat?.userEmail = 'Guest';
                                 roomRepository.deleteOneFromDatabase(
                                     room, selectedSeatIndex!);
                                 setState(() {
@@ -229,20 +202,8 @@ class _RoomPageState extends State<RoomPage> {
                         ? Container()
                         : Center(
                             child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.9), // 수정
-                                ),
-                                minimumSize: MaterialStateProperty.all<Size>(
-                                    const Size(100, 40)), // 버튼 최소 크기 설정
-                              ),
+                              // ...
                               onPressed: () {
-                                selectedSeat?.using = true;
-                                selectedSeat?.userEmail =
-                                    UserRepository.user!.email!;
                                 roomRepository.addOneToDatabase(
                                     room, selectedSeatIndex!);
                                 setState(() {

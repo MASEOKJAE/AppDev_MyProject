@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myproject/model/user.dart';
 
 class RoomRepository extends ChangeNotifier {
   final _rooms = <Room>[];
@@ -18,7 +19,7 @@ class RoomRepository extends ChangeNotifier {
       SecondRoom(),
       LaptopRoom(),
       FifthRoom(),
-      SwRoom()
+      SwRoom(),
     ];
 
     for (Room room in roomInstances) {
@@ -30,32 +31,16 @@ class RoomRepository extends ChangeNotifier {
   }
 
   Future<int> getAvailableSeats(String roomName) async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection(roomName).get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('rooms') // 'rooms' 컬렉션에 접근
+      .doc(roomName)
+      .collection('seats') // 각 room의 'seats' 컬렉션에 접근
+      .get();
+      
     int occupiedSeats = querySnapshot.docs.length;
     Room room = getRoom(roomName);
-    int totalSeats =
-        room.totalSeats; // totalSeats는 Room 클래스에 추가해야 할 총 자리 수를 나타내는 변수입니다.
+    int totalSeats = room.totalSeats;
     return totalSeats - occupiedSeats;
-  }
-
-  Future<void> updateSeat(Room room, int seatNum) async {
-    for (var row in room.seats) {
-      for (var seat in row) {
-        if (seat.index == seatNum && seat.exist) {
-          DocumentSnapshot seatSnapshot = await FirebaseFirestore.instance
-              .collection(room.name)
-              .doc(seat.index.toString())
-              .get();
-          if (seatSnapshot.exists) {
-            bool using =
-                (seatSnapshot.data() as Map<String, dynamic>)['seatState'] ??
-                    false;
-            seat.using = using;
-          }
-        }
-      }
-    }
   }
 
   Future<void> updateSeats(Room room) async {
@@ -63,14 +48,15 @@ class RoomRepository extends ChangeNotifier {
       for (var seat in row) {
         if (seat.exist) {
           DocumentSnapshot seatSnapshot = await FirebaseFirestore.instance
-              .collection(room.name)
-              .doc(seat.index.toString())
-              .get();
+            .collection('rooms')
+            .doc(room.name)
+            .collection('seats')
+            .doc(seat.index.toString().padLeft(3, '0')) // '001' 형식으로 문서에 접근
+            .get();
+            
           if (seatSnapshot.exists) {
-            bool using =
-                (seatSnapshot.data() as Map<String, dynamic>)['seatState'] ??
-                    false;
-            seat.using = using;
+            String email = (seatSnapshot.data() as Map<String, dynamic>)['email'];
+            seat.userEmail = email;
           }
         }
       }
@@ -78,31 +64,41 @@ class RoomRepository extends ChangeNotifier {
   }
 
   Future addOneToDatabase(Room room, int seatNum) async {
+    User user = _auth.currentUser!;
     await FirebaseFirestore.instance
-        .collection(room.name)
-        .doc(seatNum.toString())
-        .set({
-      'email': _auth.currentUser!.email,
-      'seatState': true,
-    });
-    room.use(seatNum);
+      .collection('rooms')
+      .doc(room.name)
+      .collection('seats')
+      .doc(seatNum.toString().padLeft(3, '0'))
+      .set({
+        'email': user.email,
+        'index': seatNum,
+      });
+    // room.use(seatNum, user);
+    room.use(seatNum, UserModel(email: user.email, name: user.displayName));
     notifyListeners();
   }
 
   Future updateOneToDatabase(Room room, int seatNum) async {
     await FirebaseFirestore.instance
-        .collection(room.name)
-        .doc(seatNum.toString())
-        .update({
-      'seatState': room.getSeat(seatNum)?.using,
-    });
+      .collection('rooms')
+      .doc(room.name)
+      .collection('seats')
+      .doc(seatNum.toString().padLeft(3, '0'))
+      .update({
+        'seatState': room.getSeat(seatNum)?.using,
+      });
   }
 
   Future deleteOneFromDatabase(Room room, int seatNum) async {
     await FirebaseFirestore.instance
-        .collection(room.name)
-        .doc(seatNum.toString())
-        .delete();
+      .collection('rooms')
+      .doc(room.name)
+      .collection('seats')
+      .doc(seatNum.toString().padLeft(3, '0'))
+      .delete();
+    room.getSeat(seatNum)?.leave();
+    notifyListeners();
   }
 
   Room getRoom(String name) {

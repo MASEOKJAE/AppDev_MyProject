@@ -6,6 +6,8 @@ class UserModel {
   String? email;
   String? statusMessage;
 
+  UserModel({required this.email, this.name});
+
   UserModel.fromCredential(UserCredential credential) {
     uid = credential.user!.uid;
     name = credential.user!.displayName;

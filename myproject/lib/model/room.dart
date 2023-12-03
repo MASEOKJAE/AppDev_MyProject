@@ -1,5 +1,6 @@
 import 'package:myproject/model/seat.dart';
 import 'package:flutter/material.dart';
+import 'package:myproject/model/user.dart';
 
 
 abstract class Room {
@@ -7,7 +8,7 @@ abstract class Room {
   late Size size;
   late List<Offset> offsets;
   late List<List<Seat>> seats;
-  late int totalSeats;
+  int get totalSeats => offsets.length;
 
   Seat? getSeat(int? index) {
     if (index == null) return null;
@@ -17,7 +18,8 @@ abstract class Room {
   }
 
   void initSeats();
-  void use(int index) => getSeat(index)?.use();
+  void use(int index, UserModel user) => getSeat(index)?.use(user);
+
 }
 
 class FirstRoom extends Room {
@@ -31,9 +33,6 @@ class FirstRoom extends Room {
   List<Offset> get offsets => const [
     Offset(0, 1), Offset(0, 2), Offset(0, 3), Offset(0, 5), Offset(0, 6), Offset(1, 8), Offset(2, 8), Offset(4, 8), Offset(5, 8), Offset(7, 8), Offset(8, 8), Offset(9, 8), Offset(11, 8), Offset(12, 8), Offset(13, 8), Offset(3, 1), Offset(4, 1), Offset(5, 1), Offset(7, 1), Offset(8, 1), Offset(9, 1), Offset(11, 1), Offset(12, 1), Offset(13, 1), Offset(3, 2), Offset(4, 2), Offset(5, 2), Offset(7, 2), Offset(8, 2), Offset(9, 2), Offset(11, 2), Offset(12, 2), Offset(13, 2), Offset(3, 4), Offset(4, 4), Offset(5, 4), Offset(7, 4), Offset(8, 4), Offset(9, 4), Offset(11, 4), Offset(12, 4), Offset(13, 4), Offset(3, 5), Offset(4, 5), Offset(5, 5), Offset(7, 5), Offset(8, 5), Offset(9, 5), Offset(11, 5), Offset(12, 5), Offset(13, 5)
   ];
-
-  @override
-  int get totalSeats => 150;
 
   @override
   initSeats() {
@@ -65,9 +64,6 @@ class SecondRoom extends Room {
   ];
 
   @override
-  int get totalSeats => 200;
-
-  @override
   void initSeats() {
     seats = List.generate(
       size.height.toInt(), (i) => List.generate(
@@ -91,8 +87,6 @@ class LaptopRoom extends Room {
   @override
   Size get size => const Size(9, 14);
 
-  @override
-  int get totalSeats => 51;
 
   @override
   List<Offset> get offsets => const [
@@ -121,14 +115,11 @@ class FifthRoom extends Room {
   String get name => '제 5열람실';
 
   @override
-  Size get size => const Size(9, 14);
-
-  @override
-  int get totalSeats => 45;
+  Size get size => const Size(11, 20);
 
   @override
   List<Offset> get offsets => const [
-    Offset(0, 1), Offset(0, 2), Offset(0, 3), Offset(0, 5), Offset(0, 6), Offset(1, 8), Offset(2, 8), Offset(4, 8), Offset(5, 8), Offset(7, 8), Offset(8, 8), Offset(9, 8), Offset(11, 8), Offset(12, 8), Offset(13, 8), Offset(3, 1), Offset(4, 1), Offset(5, 1), Offset(7, 1), Offset(8, 1), Offset(9, 1), Offset(11, 1), Offset(12, 1), Offset(13, 1), Offset(3, 2), Offset(4, 2), Offset(5, 2), Offset(7, 2), Offset(8, 2), Offset(9, 2), Offset(11, 2), Offset(12, 2), Offset(13, 2), Offset(3, 4), Offset(4, 4), Offset(5, 4), Offset(7, 4), Offset(8, 4), Offset(9, 4), Offset(11, 4), Offset(12, 4), Offset(13, 4), Offset(3, 5), Offset(4, 5), Offset(5, 5), Offset(7, 5), Offset(8, 5), Offset(9, 5), Offset(11, 5), Offset(12, 5), Offset(13, 5)
+    Offset(0, 0), Offset(0, 1), Offset(0, 2), Offset(0, 3), Offset(0, 4), Offset(0, 9), Offset(0, 10), Offset(2, 0), Offset(2, 1), Offset(2, 2), Offset(3, 0), Offset(3, 1), Offset(3, 2), Offset(2, 8), Offset(2, 9), Offset(2, 10), Offset(3, 8), Offset(3, 9), Offset(3, 10), Offset(5, 0), Offset(5, 1), Offset(5, 2), Offset(6, 0), Offset(6, 1), Offset(6, 2), Offset(5, 8), Offset(5, 9), Offset(5, 10), Offset(6, 8), Offset(6, 9), Offset(6, 10), Offset(8, 0), Offset(8, 1), Offset(8, 2), Offset(9, 0), Offset(9, 1), Offset(9, 2), Offset(8, 8), Offset(8, 9), Offset(8, 10), Offset(9, 8), Offset(9, 9), Offset(9, 10), Offset(11, 0), Offset(11, 1), Offset(11, 2), Offset(12, 0), Offset(12, 1), Offset(12, 2), Offset(11, 8), Offset(11, 9), Offset(11, 10), Offset(12, 8), Offset(12, 9), Offset(12, 10), Offset(14, 0), Offset(15, 0), Offset(16, 0), Offset(17, 0), Offset(18, 0), Offset(19, 0), Offset(14, 8), Offset(15, 8), Offset(16, 8), Offset(17, 8), Offset(18, 8), Offset(19, 8),
   ];
 
   @override
@@ -154,9 +145,6 @@ class SwRoom extends Room {
 
   @override
   Size get size => const Size(9, 14);
-
-  @override
-  int get totalSeats => 80;
 
   @override
   List<Offset> get offsets => const [
