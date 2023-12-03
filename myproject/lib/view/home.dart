@@ -2,6 +2,9 @@ import 'package:myproject/config/theme.dart';
 import 'package:myproject/model/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myproject/model/room_repository.dart';
+
+final roomRepo = RoomRepository();
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,8 +22,10 @@ class _HomePageState extends State<HomePage> {
   ];
   final List<int> colorCodes = <int>[600, 500, 100, 600, 500, 100];
 
-  Widget _buildCard(BuildContext context, {
+  Widget _buildCard(
+    BuildContext context, {
     required String title,
+    TextStyle titleStyle = const TextStyle(),
     Widget? child,
     VoidCallback? onPressed,
     bool isPortrait = false,
@@ -48,7 +53,10 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title),
+                Text(
+                  title,
+                  style: titleStyle,
+                ),
                 const SizedBox(height: 20),
                 if (child != null) child,
               ],
@@ -66,6 +74,11 @@ class _HomePageState extends State<HomePage> {
           _buildCard(
             context,
             title: '즐겨찾기',
+            titleStyle: const TextStyle(
+              // 'titleStyle' 파라미터에 원하는 스타일 설정
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
             onPressed: () {
               Navigator.pushNamed(context, '/favorite');
             },
@@ -81,17 +94,44 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(width: 50),
                 Column(
                   children: [
-                    Text('사용 중'),
-                    Text('6'),
+                    Text('전체 자리'),
+                    Text('15'),
                   ],
                 ),
               ],
             ),
           ),
           const SizedBox(height: 20),
-          _buildCard(context, title: '제 1열람실', onPressed: () {
-            Navigator.pushNamed(context, '/room', arguments: FirstRoom());
-          }),
+          _buildCard(
+            context,
+            title: '제 1열람실',
+            titleStyle: const TextStyle(
+              // 'titleStyle' 파라미터에 원하는 스타일 설정
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/room', arguments: FirstRoom());
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Text('사용 가능'),
+                    Text('8'),
+                  ],
+                ),
+                SizedBox(width: 20),
+                Column(
+                  children: [
+                    Text('전체 자리'),
+                    Text('6'),
+                  ],
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,27 +140,135 @@ class _HomePageState extends State<HomePage> {
                 child: _buildCard(
                   context,
                   title: '제 2열람실',
+                  titleStyle: const TextStyle(
+                    // 'titleStyle' 파라미터에 원하는 스타일 설정
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                   isPortrait: true,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/room', arguments: SecondRoom());
+                    Navigator.pushNamed(context, '/room',
+                        arguments: SecondRoom());
                   },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text('사용 가능'),
+                          Text('8'),
+                        ],
+                      ),
+                      SizedBox(width: 20),
+                      Column(
+                        children: [
+                          Text('전체 자리'),
+                          Text('6'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
                   children: [
-                    _buildCard(context, title: '노트북 열람실', onPressed: () {
-                      Navigator.pushNamed(context, '/room', arguments: LaptopRoom());
-                    }),
+                    _buildCard(
+                      context,
+                      title: '노트북 열람실',
+                      titleStyle: const TextStyle(
+                        // 'titleStyle' 파라미터에 원하는 스타일 설정
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/room',
+                            arguments: LaptopRoom());
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text('사용 가능'),
+                              Text('8'),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Column(
+                            children: [
+                              Text('전체 자리'),
+                              Text('6'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 20),
-                    _buildCard(context, title: '제 5열람실', onPressed: () {
-                      Navigator.pushNamed(context, '/room', arguments: FifthRoom());
-                    }),
+                    _buildCard(
+                      context,
+                      title: '제 5열람실',
+                      titleStyle: const TextStyle(
+                        // 'titleStyle' 파라미터에 원하는 스타일 설정
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/room',
+                            arguments: FifthRoom());
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text('사용 가능'),
+                              Text('8'),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Column(
+                            children: [
+                              Text('전체 자리'),
+                              Text('6'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 20),
-                    _buildCard(context, title: 'SW 플라자', onPressed: () {
-                      Navigator.pushNamed(context, '/room', arguments: SwRoom());
-                    }),
+                    _buildCard(
+                      context,
+                      title: 'SW 플라자',
+                      titleStyle: const TextStyle(
+                        // 'titleStyle' 파라미터에 원하는 스타일 설정
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/room',
+                            arguments: SwRoom());
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Text('사용 가능'),
+                              Text('8'),
+                            ],
+                          ),
+                          SizedBox(width: 20),
+                          Column(
+                            children: [
+                              Text('전체 자리'),
+                              Text('6'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -147,7 +295,8 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         Navigator.pop(context);
         if (index == 0) {
-          Navigator.pushNamedAndRemoveUntil(context, routes[index], (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, routes[index], (route) => false);
           return;
         }
         Navigator.pushNamed(context, routes[index]);
@@ -166,7 +315,8 @@ class _HomePageState extends State<HomePage> {
             child: null,
           ),
           Column(
-            children: List.generate(4, (index) => _buildDrawerTile(context, index)),
+            children:
+                List.generate(4, (index) => _buildDrawerTile(context, index)),
           ),
         ],
       ),

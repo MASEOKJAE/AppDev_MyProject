@@ -4,10 +4,11 @@ import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 import 'package:myproject/model/seat.dart';
 import 'package:myproject/model/room_repository.dart';
+import 'package:myproject/model/user_repository.dart';
 import 'package:provider/provider.dart';
 
 class RoomPage extends StatefulWidget {
-  const RoomPage({super.key});
+  const RoomPage({super.key}) : super();
 
   @override
   State<RoomPage> createState() => _RoomPageState();
@@ -19,6 +20,8 @@ class _RoomPageState extends State<RoomPage> {
   Seat? get selectedSeat => room.getSeat(selectedSeatIndex);
   String? selectedUserEmail;
   late RoomRepository roomRepository;
+  late UserRepository userRepository;
+  bool isUserUsingSeat = false;
 
   @override
   void initState() {
@@ -29,8 +32,11 @@ class _RoomPageState extends State<RoomPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     roomRepository = Provider.of<RoomRepository>(context, listen: false);
+    userRepository = Provider.of<UserRepository>(context, listen: false);
     room = ModalRoute.of(context)!.settings.arguments as Room;
     room = roomRepository.getRoom(room.name);
+    isUserUsingSeat = room.seats.any((row) => row.any((seat) =>
+        seat.using && seat.userEmail == UserRepository.user!.email));
   }
 
   Widget _buildSeatsWidget(BuildContext context) {
@@ -192,30 +198,62 @@ class _RoomPageState extends State<RoomPage> {
                   ),
                 ),
                 selectedSeat!.using
-                    ? Container()
-                    : Center(
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.alphaBlend(
-                                MyColorTheme.primary.withOpacity(0.9),
-                                Colors.white,
+                    ? (selectedUserEmail == UserRepository.user!.email
+                        ? Center(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.9),
+                                ),
+                                minimumSize: MaterialStateProperty.all<Size>(
+                                    const Size(100, 40)), // 버튼 최소 크기 설정
                               ),
+                              onPressed: () {
+                                print(isUserUsingSeat);
+                                selectedSeat?.using = false;
+                                selectedSeat?.userEmail = 'Guest';
+                                roomRepository.deleteOneFromDatabase(
+                                    room, selectedSeatIndex!);
+                                setState(() {
+                                  isUserUsingSeat = false;
+                                });
+                              },
+                              child: const Text('떠나기'),
                             ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                                const Size(100, 40)), // 버튼의 최소 크기 설정
-                          ),
-                          onPressed: () {
-                            selectedSeat?.using = true;
-                            roomRepository.addOneToDatabase(
-                                room, selectedSeatIndex!);
-                            setState(() {});
-                          },
-                          child: const Text('사용'),
-                        ),
-                      ),
+                          )
+                        : Container())
+                    : (isUserUsingSeat
+                        ? Container()
+                        : Center(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.9), // 수정
+                                ),
+                                minimumSize: MaterialStateProperty.all<Size>(
+                                    const Size(100, 40)), // 버튼 최소 크기 설정
+                              ),
+                              onPressed: () {
+                                selectedSeat?.using = true;
+                                selectedSeat?.userEmail =
+                                    UserRepository.user!.email!;
+                                roomRepository.addOneToDatabase(
+                                    room, selectedSeatIndex!);
+                                setState(() {
+                                  isUserUsingSeat = true;
+                                });
+                              },
+                              child: const Text('사용'),
+                            ),
+                          ))
               ],
-            ), // Padding 위젯 안에 표시할 내용을 추가합니다.
+            ),
           ),
         ),
       ),

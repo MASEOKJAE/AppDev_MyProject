@@ -29,6 +29,16 @@ class RoomRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<int> getAvailableSeats(String roomName) async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(roomName).get();
+    int occupiedSeats = querySnapshot.docs.length;
+    Room room = getRoom(roomName);
+    int totalSeats =
+        room.totalSeats; // totalSeats는 Room 클래스에 추가해야 할 총 자리 수를 나타내는 변수입니다.
+    return totalSeats - occupiedSeats;
+  }
+
   Future<void> updateSeat(Room room, int seatNum) async {
     for (var row in room.seats) {
       for (var seat in row) {
