@@ -21,12 +21,16 @@ class _RoomPageState extends State<RoomPage> {
   late RoomRepository roomRepository;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    roomRepository = Provider.of<RoomRepository>(context, listen: false);
     room = ModalRoute.of(context)!.settings.arguments as Room;
-    roomRepository = Provider.of<RoomRepository>(context);
-    roomRepository.loadAllFromDatabase();
-    setState(() {});
+    room = roomRepository.getRoom(room.name);
   }
 
   Widget _buildSeatsWidget(BuildContext context) {
@@ -62,6 +66,10 @@ class _RoomPageState extends State<RoomPage> {
                           userEmail = (seatSnapshot.data()
                                   as Map<String, dynamic>)['email'] ??
                               'Guest';
+                          bool using = (seatSnapshot.data()
+                                  as Map<String, dynamic>)['seatState'] ??
+                              false;
+                          room.seats[i][j].using = using;
                         }
                         setState(() {
                           if (index == selectedSeatIndex) {
@@ -105,13 +113,13 @@ class _RoomPageState extends State<RoomPage> {
     if (selectedSeatIndex == null) return Container();
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 만듭니다.
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: Container(
         height: 150,
         decoration: BoxDecoration(
           color: MyColorTheme.primary.withOpacity(.3),
-          borderRadius: BorderRadius.circular(10.0), // 모서리를 둥글게 만듭니다.
+          borderRadius: BorderRadius.circular(10.0),
         ),
         child: Align(
           alignment: Alignment.topLeft,

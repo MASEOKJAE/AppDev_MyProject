@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myproject/model/room.dart';
 
 class RoomRepository extends ChangeNotifier {
   final _rooms = <Room>[];
@@ -14,25 +13,65 @@ class RoomRepository extends ChangeNotifier {
     _rooms.clear();
 
     // List of room instances
-    List<Room> roomInstances = [FirstRoom(), SecondRoom(), LaptopRoom(), FifthRoom(), SwRoom()];
+    List<Room> roomInstances = [
+      FirstRoom(),
+      SecondRoom(),
+      LaptopRoom(),
+      FifthRoom(),
+      SwRoom()
+    ];
 
     for (Room room in roomInstances) {
-      var collection = await FirebaseFirestore.instance.collection(room.name).get();
       room.initSeats();
-      for (var doc in collection.docs) {
-        int seatNum = int.parse(doc.id);  // Assuming that the document ID is the seat number
-        bool seatState = doc.data()['seatState'];
-        if (seatState) {
-          room.use(seatNum);
-        }
-      }
+      await updateSeats(room); // Update the seats state from Firestore
       _rooms.add(room);
     }
     notifyListeners();
   }
 
+  Future<void> updateSeat(Room room, int seatNum) async {
+    for (var row in room.seats) {
+      for (var seat in row) {
+        if (seat.index == seatNum && seat.exist) {
+          DocumentSnapshot seatSnapshot = await FirebaseFirestore.instance
+              .collection(room.name)
+              .doc(seat.index.toString())
+              .get();
+          if (seatSnapshot.exists) {
+            bool using =
+                (seatSnapshot.data() as Map<String, dynamic>)['seatState'] ??
+                    false;
+            seat.using = using;
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> updateSeats(Room room) async {
+    for (var row in room.seats) {
+      for (var seat in row) {
+        if (seat.exist) {
+          DocumentSnapshot seatSnapshot = await FirebaseFirestore.instance
+              .collection(room.name)
+              .doc(seat.index.toString())
+              .get();
+          if (seatSnapshot.exists) {
+            bool using =
+                (seatSnapshot.data() as Map<String, dynamic>)['seatState'] ??
+                    false;
+            seat.using = using;
+          }
+        }
+      }
+    }
+  }
+
   Future addOneToDatabase(Room room, int seatNum) async {
-    await FirebaseFirestore.instance.collection(room.name).doc(seatNum.toString()).set({
+    await FirebaseFirestore.instance
+        .collection(room.name)
+        .doc(seatNum.toString())
+        .set({
       'email': _auth.currentUser!.email,
       'seatState': true,
     });
@@ -41,13 +80,19 @@ class RoomRepository extends ChangeNotifier {
   }
 
   Future updateOneToDatabase(Room room, int seatNum) async {
-    await FirebaseFirestore.instance.collection(room.name).doc(seatNum.toString()).update({
+    await FirebaseFirestore.instance
+        .collection(room.name)
+        .doc(seatNum.toString())
+        .update({
       'seatState': room.getSeat(seatNum)?.using,
     });
   }
 
   Future deleteOneFromDatabase(Room room, int seatNum) async {
-    await FirebaseFirestore.instance.collection(room.name).doc(seatNum.toString()).delete();
+    await FirebaseFirestore.instance
+        .collection(room.name)
+        .doc(seatNum.toString())
+        .delete();
   }
 
   Room getRoom(String name) {
