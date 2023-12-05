@@ -21,6 +21,7 @@ class _RoomPageState extends State<RoomPage> {
   late RoomRepository roomRepository;
   late UserRepository userRepository;
   bool isUserUsingSeat = false;
+  bool _isFavorited = false;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _RoomPageState extends State<RoomPage> {
     userRepository = Provider.of<UserRepository>(context, listen: false);
     room = ModalRoute.of(context)!.settings.arguments as Room;
     room = roomRepository.getRoom(room.name);
+    userRepository.loadFavorite(room.name);
     isUserUsingSeat = room.seats.any((row) => row.any(
         (seat) => seat.using && seat.userEmail == UserRepository.user!.email));
     roomRepository.updateSeats(room);
@@ -102,6 +104,10 @@ class _RoomPageState extends State<RoomPage> {
 
   Widget _infoCard(BuildContext context) {
     if (selectedSeatIndex == null) return Container();
+
+    _isFavorited =
+        userRepository.isInFavorite(room.name, selectedSeatIndex.toString());
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -119,26 +125,49 @@ class _RoomPageState extends State<RoomPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      const TextSpan(
-                        text: '자리 번호: ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          const TextSpan(
+                            text: '자리 번호: ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: selectedSeatIndex!.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
-                      TextSpan(
-                        text: selectedSeatIndex!.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (_isFavorited) {
+                          userRepository.removeFromFavorite(
+                              room.name, selectedSeatIndex.toString());
+                        } else {
+                          userRepository.addToFavorite(
+                              room.name, selectedSeatIndex.toString());
+                        }
+                        setState(() {
+                          _isFavorited = !_isFavorited;
+                        });
+                      },
+                      child: Icon(_isFavorited ? Icons.star : Icons.star_border,
+                          color: _isFavorited
+                              ? Colors.yellow.shade600
+                              : Colors.white),
+                    ),
+                  ],
                 ),
                 RichText(
                   text: TextSpan(

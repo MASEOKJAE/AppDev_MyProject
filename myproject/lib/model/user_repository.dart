@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class UserRepository extends ChangeNotifier {
   static UserModel? user;
 
-  List<String> _wishlistItems = [];
+  final Map<String, List<String>> _favoriteItems = {};
 
-  List<String> get wishlistItems => _wishlistItems;
+  Map<String, List<String>> get favoriteItems => _favoriteItems;
 
   static void login(UserModel u) => user = u;
   static void logout() => user = null;
@@ -22,9 +22,6 @@ class UserRepository extends ChangeNotifier {
       _users.add(UserModel.fromJson(doc.id, doc.data()));
     }
 
-    if (user != null) {
-      loadWishlist();
-    }
     notifyListeners();
   }
 
@@ -32,38 +29,42 @@ class UserRepository extends ChangeNotifier {
     return _users.firstWhere((user) => user.uid == uid);
   }
 
-  Future<void> loadWishlist() async {
+  Future<void> loadFavorite(String roomName) async {
     DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
+        .collection('favorite')
+        .doc(roomName)
         .get();
     if (doc.exists) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      _wishlistItems = List<String>.from(data['wishlist'] ?? []);
+      _favoriteItems[roomName] = List<String>.from(data['index'] ?? []);
     }
     notifyListeners();
   }
 
-  void addToWishlist(String productId) {
-    _wishlistItems.add(productId);
-    _updateWishlistInFirebase();
+  void addToFavorite(String roomName, String seatIndex) {
+    (_favoriteItems[roomName] ??= []).add(seatIndex);
+    _updateFavoriteInFirebase(roomName);
     notifyListeners();
   }
 
-  void removeFromWishlist(String productId) {
-    _wishlistItems.remove(productId);
-    _updateWishlistInFirebase();
+  void removeFromFavorite(String roomName, String seatIndex) {
+    (_favoriteItems[roomName] ??= []).remove(seatIndex);
+    _updateFavoriteInFirebase(roomName);
     notifyListeners();
   }
 
-  bool isInWishlist(String productId) {
-    return _wishlistItems.contains(productId);
+  bool isInFavorite(String roomName, String seatIndex) {
+    return (_favoriteItems[roomName] ??= []).contains(seatIndex);
   }
 
-  void _updateWishlistInFirebase() {
+  void _updateFavoriteInFirebase(String roomName) {
     FirebaseFirestore.instance
         .collection('users')
         .doc(user!.uid)
-        .update({'wishlist': _wishlistItems});
+        .collection('favorite')
+        .doc(roomName)
+        .set({'index': _favoriteItems[roomName]});
   }
 }
