@@ -74,7 +74,7 @@ class _FavoriteState extends State<FavoritePage> {
       future: _loadData(),
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // 데이터 로드 중일 때 표시할 위젯
+          return _loadUI(); // 데이터 로드 중일 때 표시할 위젯
         } else {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -95,37 +95,39 @@ class _FavoriteState extends State<FavoritePage> {
     }
   }
 
-  Widget _buildUI() {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: false,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: MyColorTheme.primary,
-        ),
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
-      themeMode: ThemeMode.light,
-      home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: const Text('즐겨찾는 자리'),
-          actions: [],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: areaNames.length,
-            itemBuilder: (context, index) {
-              return buildContainer(
-                areaNames[index],
-              );
-            },
-          ),
+      title: const Text('Favorites'),
+      actions: [],
+    );
+  }
+
+  Widget _loadUI() {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _buildUI() {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: areaNames.length,
+          itemBuilder: (context, index) {
+            return buildContainer(
+              areaNames[index],
+            );
+          },
         ),
       ),
     );
