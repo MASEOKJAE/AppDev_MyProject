@@ -20,10 +20,16 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('My Page'),
         centerTitle: true,
         // backgroundColor: Colors.black,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.map),
+            onPressed: () {
+              Navigator.pushNamed(context, '/location');
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -199,7 +205,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Icon(
-                        Icons.warning, // 트로피 아이콘
+                        Icons.warning,
                         color: Colors.black,
                         size: 30,
                       ),

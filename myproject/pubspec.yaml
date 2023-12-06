@@ -25,6 +25,9 @@ dependencies:
   image_picker: ^1.0.4
   firebase_storage: ^11.5.0
   flutter_svg: ^2.0.9
+  location: ^5.0.3
+  flutter_local_notifications: ^16.2.0
+  permission_handler: ^11.0.1
 
 dev_dependencies:
   flutter_test:

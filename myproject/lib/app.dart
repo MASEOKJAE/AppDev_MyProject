@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'view/home.dart';
 import 'view/login.dart';
 import 'view/profile.dart';
+import 'view/location.dart';
 import 'view/setting.dart';
 import 'view/space/favorite.dart';
 import 'package:myproject/view/space/room_check.dart';
@@ -23,6 +24,7 @@ class StudyApp extends StatelessWidget {
         '/login': (BuildContext context) => const LoginPage(),
         '/': (BuildContext context) => const HomePage(),
         '/profile': (BuildContext context) => const Profile(),
+        '/location': (BuildContext context) => const LocationPage(),
         '/favorite': (BuildContext context) => const FavoritePage(),
         '/setting': (BuildContext context) => const SettingPage(),
         '/room': (BuildContext context) => const RoomPage(),       
