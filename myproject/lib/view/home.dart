@@ -120,12 +120,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDrawerTile(BuildContext context, int index) {
-    List<String> titles = ['홈', '즐겨찾기', '프로필', '설정'];
-    List<String> routes = ['/', '/favorite', '/profile', '/setting'];
+    List<String> titles = ['홈', '즐겨찾기', '프로필', 'QR찾기', '동기부여', '설정'];
+    List<String> routes = ['/', '/favorite', '/profile', '/qrscan', '/motivation', '/setting'];
     List<IconData> icons = [
       Icons.home,
       Icons.star,
       Icons.account_circle,
+      Icons.qr_code_scanner,
+      Icons.hotel_class_sharp,
       Icons.settings,
     ];
 
@@ -156,7 +158,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Column(
             children:
-                List.generate(4, (index) => _buildDrawerTile(context, index)),
+                List.generate(6, (index) => _buildDrawerTile(context, index)),
           ),
         ],
       ),

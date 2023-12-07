@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myproject/model/seat.dart';
 import 'package:myproject/model/user.dart';
 
 class RoomRepository extends ChangeNotifier {
@@ -103,5 +104,20 @@ class RoomRepository extends ChangeNotifier {
 
   Room getRoom(String name) {
     return _rooms.firstWhere((room) => room.name == name);
+  }
+
+  Seat getSeat(String roomName, int seatNum) {
+    Room room = getRoom(roomName);
+
+    for (var row in room.seats) {
+      for (var seat in row) {
+        if (seat.exist && seat.index == seatNum) {
+          return seat;
+        }
+      }
+    }
+
+    // If the seat is not found, return an empty seat
+    return Seat.empty();
   }
 }

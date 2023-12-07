@@ -6,6 +6,8 @@ import 'view/login.dart';
 import 'view/profile.dart';
 import 'view/location.dart';
 import 'view/setting.dart';
+import 'view/qrscan.dart';
+import 'view/motivation.dart';
 import 'view/space/favorite.dart';
 import 'package:myproject/view/space/room_check.dart';
 
@@ -27,7 +29,9 @@ class StudyApp extends StatelessWidget {
         '/location': (BuildContext context) => const LocationPage(),
         '/favorite': (BuildContext context) => const FavoritePage(),
         '/setting': (BuildContext context) => const SettingPage(),
-        '/room': (BuildContext context) => const RoomPage(),       
+        '/room': (BuildContext context) => const RoomPage(),
+        '/qrscan': (BuildContext context) => const QrscanPage(),
+        '/motivation': (BuildContext context) => const MotivationPage(),
         // '/wishlist': (BuildContext context) => const WishListPage(),
       },
       theme: ThemeData(
