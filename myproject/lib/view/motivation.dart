@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/model/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myproject/view/widget/stopwatch.dart'; // stopwatch.dart를 import 합니다.
 
 class MotivationPage extends StatefulWidget {
   const MotivationPage({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class MotivationPage extends StatefulWidget {
 class _MotivationState extends State<MotivationPage> {
   DateTime? scheduledTime;
   String imageUrl = '';
+  final _stopWatchWidget = StopWatch(); // StopWatch instance
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _MotivationState extends State<MotivationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('모티베이션 페이지'),
+        title: const Text('Motivation'),
       ),
       body: Center(
         child: Column(
@@ -44,6 +46,13 @@ class _MotivationState extends State<MotivationPage> {
             ElevatedButton(
               onPressed: () => _selectTime(),
               child: const Text('목표 시간 선택'),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+            Expanded(
+              // Add Expanded here
+              child: _stopWatchWidget, // Use StopWatch widget here
             ),
           ],
         ),
