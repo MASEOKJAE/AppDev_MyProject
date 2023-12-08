@@ -3,8 +3,9 @@ import 'package:myproject/model/room.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myproject/model/room_repository.dart';
+import 'package:provider/provider.dart';
 
-final roomRepo = RoomRepository();
+// final roomRepo = RoomRepository();
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
 
   Widget _buildRoomCard(BuildContext context, Room room) {
+    RoomRepository roomRepo = Provider.of<RoomRepository>(context);
     double height = 110;
 
     if (room.name == '제 2열람실') height = height * 3 + 40;
@@ -55,14 +57,14 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Column(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('사용 가능'),
-                          Text(
-                            '10',
-                            style: TextStyle(fontSize: 20),
-                          ),
+                          const Text('사용 가능'),
+                          // Text(
+                          //   '${roomRepo.getUsingNum(room.name)}',
+                          //   style: TextStyle(fontSize: 20),
+                          // ),
                         ],
                       ),
                       const SizedBox(width: 20),

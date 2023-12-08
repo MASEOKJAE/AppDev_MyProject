@@ -222,6 +222,12 @@ class _RoomPageState extends State<RoomPage> {
                                 setState(() {
                                   isUserUsingSeat = false;
                                 });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        '이제 다른 좌석을 사용하실 수 있습니다 :)'),
+                                  ),
+                                );
                               },
                               child: const Text('떠나기'),
                             ),
@@ -238,6 +244,12 @@ class _RoomPageState extends State<RoomPage> {
                                 setState(() {
                                   isUserUsingSeat = true;
                                 });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        '해당 좌석을 사용하시면, 다른 좌석은 사용하실 수 없습니다.'),
+                                  ),
+                                );
                               },
                               child: const Text('사용'),
                             ),

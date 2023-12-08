@@ -33,11 +33,11 @@ class RoomRepository extends ChangeNotifier {
 
   Future<int> getAvailableSeats(String roomName) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('rooms') // 'rooms' 컬렉션에 접근
-      .doc(roomName)
-      .collection('seats') // 각 room의 'seats' 컬렉션에 접근
-      .get();
-      
+        .collection('rooms') // 'rooms' 컬렉션에 접근
+        .doc(roomName)
+        .collection('seats') // 각 room의 'seats' 컬렉션에 접근
+        .get();
+
     int occupiedSeats = querySnapshot.docs.length;
     Room room = getRoom(roomName);
     int totalSeats = room.totalSeats;
@@ -49,14 +49,15 @@ class RoomRepository extends ChangeNotifier {
       for (var seat in row) {
         if (seat.exist) {
           DocumentSnapshot seatSnapshot = await FirebaseFirestore.instance
-            .collection('rooms')
-            .doc(room.name)
-            .collection('seats')
-            .doc(seat.index.toString().padLeft(3, '0')) // '001' 형식으로 문서에 접근
-            .get();
-            
+              .collection('rooms')
+              .doc(room.name)
+              .collection('seats')
+              .doc(seat.index.toString().padLeft(3, '0')) // '001' 형식으로 문서에 접근
+              .get();
+
           if (seatSnapshot.exists) {
-            String email = (seatSnapshot.data() as Map<String, dynamic>)['email'];
+            String email =
+                (seatSnapshot.data() as Map<String, dynamic>)['email'];
             seat.userEmail = email;
           }
         }
@@ -67,14 +68,14 @@ class RoomRepository extends ChangeNotifier {
   Future addOneToDatabase(Room room, int seatNum) async {
     User user = _auth.currentUser!;
     await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(room.name)
-      .collection('seats')
-      .doc(seatNum.toString().padLeft(3, '0'))
-      .set({
-        'email': user.email,
-        'index': seatNum,
-      });
+        .collection('rooms')
+        .doc(room.name)
+        .collection('seats')
+        .doc(seatNum.toString().padLeft(3, '0'))
+        .set({
+      'email': user.email,
+      'index': seatNum,
+    });
     // room.use(seatNum, user);
     room.use(seatNum, UserModel(email: user.email, name: user.displayName));
     notifyListeners();
@@ -82,22 +83,22 @@ class RoomRepository extends ChangeNotifier {
 
   Future updateOneToDatabase(Room room, int seatNum) async {
     await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(room.name)
-      .collection('seats')
-      .doc(seatNum.toString().padLeft(3, '0'))
-      .update({
-        'seatState': room.getSeat(seatNum)?.using,
-      });
+        .collection('rooms')
+        .doc(room.name)
+        .collection('seats')
+        .doc(seatNum.toString().padLeft(3, '0'))
+        .update({
+      'seatState': room.getSeat(seatNum)?.using,
+    });
   }
 
   Future deleteOneFromDatabase(Room room, int seatNum) async {
     await FirebaseFirestore.instance
-      .collection('rooms')
-      .doc(room.name)
-      .collection('seats')
-      .doc(seatNum.toString().padLeft(3, '0'))
-      .delete();
+        .collection('rooms')
+        .doc(room.name)
+        .collection('seats')
+        .doc(seatNum.toString().padLeft(3, '0'))
+        .delete();
     room.getSeat(seatNum)?.leave();
     notifyListeners();
   }
@@ -119,5 +120,22 @@ class RoomRepository extends ChangeNotifier {
 
     // If the seat is not found, return an empty seat
     return Seat.empty();
+  }
+
+  int getUsingNum(String roomName) {
+    int totalNum = 0;
+    Room room = getRoom(roomName);
+
+    print(roomName);
+    for (var row in room.seats) {
+      for (var seat in row) {
+        if (seat.exist) {
+           totalNum += 1;
+        }
+      }
+    }
+
+    int usingNum = room.offsets.length - totalNum;
+    return usingNum;
   }
 }

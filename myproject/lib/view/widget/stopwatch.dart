@@ -79,11 +79,11 @@ class StopWatchState extends State<StopWatch> {
               ),
               ElevatedButton(
                 onPressed: _resetButtonPressed,
-                child: Text('Reset'),
+                child: const Text('Reset'),
               ),
               ElevatedButton(
                 onPressed: _recordLapTime,
-                child: Text('Record'),
+                child: const Text('Record'),
               ),
             ],
           ),
