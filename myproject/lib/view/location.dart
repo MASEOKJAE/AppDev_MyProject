@@ -55,7 +55,6 @@ class _LocationState extends State<LocationPage> {
 
     _locationData = await location.getLocation();
 
-
     double distance = calculateDistance(_locationData.latitude!,
         _locationData.longitude!, 36.1028509, 129.387156);
     double bearing = calculateBearing(_locationData.latitude!,
@@ -120,13 +119,32 @@ class _LocationState extends State<LocationPage> {
             style: TextStyle(color: Colors.white)),
       ),
       body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(10.0),
-          color: Colors.white,
-          child: Text(
-            message ?? '위치를 불러오는 중...',
-            softWrap: true,
-            style: const TextStyle(fontSize: 16.0, color: Colors.black),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '오석관은 어디 있을까?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Image.network(
+                'https://images.unsplash.com/photo-1660568704661-8f11a707784b?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                width: 500,
+                height: 400,
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  message ?? '위치를 불러오는 중...',
+                  softWrap: true,
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -53,6 +53,7 @@ class _MotivationState extends State<MotivationPage> {
       thickness: 1,
       color: Colors.black,
     );
+    LocalNotification.requestNotificationPermission();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Motivation'),

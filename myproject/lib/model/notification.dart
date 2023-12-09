@@ -5,7 +5,7 @@ import 'package:timezone/data/latest.dart' as tz;
 class LocalNotification {
   LocalNotification._();
 
-  static FlutterLocalNotificationsPlugin LocalNotificationsPlugin =
+  static FlutterLocalNotificationsPlugin localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   static init() async {
@@ -16,9 +16,9 @@ class LocalNotification {
 
     DarwinInitializationSettings iosInitializationSettings =
         const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
 
     InitializationSettings initializationSettings = InitializationSettings(
@@ -26,11 +26,14 @@ class LocalNotification {
       iOS: iosInitializationSettings,
     );
 
-    await LocalNotificationsPlugin.initialize(initializationSettings);
+    print("여기 초기화 하는 중!");
+
+    await localNotificationsPlugin.initialize(initializationSettings);
   }
 
-  static requestNotificationPermission() {
-    LocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+  static void requestNotificationPermission() {
+    print("권한 요청 중!");
+    localNotificationsPlugin.resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
       alert: true,
@@ -63,7 +66,7 @@ class LocalNotification {
     String notificationMessage =
         '목표 시간까지 ${minutesDifference ~/ 60}시간 ${minutesDifference % 60}분 남았습니다! 힘내세요 :)';
 
-    await LocalNotificationsPlugin.zonedSchedule(
+    await localNotificationsPlugin.zonedSchedule(
       notificationId,
       '목표 시간 알림',
       notificationMessage,

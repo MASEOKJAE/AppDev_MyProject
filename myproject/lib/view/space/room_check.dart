@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:myproject/config/theme.dart';
 import 'package:myproject/model/room.dart';
 import 'package:flutter/material.dart';
@@ -215,19 +217,19 @@ class _RoomPageState extends State<RoomPage> {
                     ? (selectedUserEmail == UserRepository.user!.email
                         ? Center(
                             child: ElevatedButton(
-                              // ...
-                              onPressed: () {
-                                roomRepository.deleteOneFromDatabase(
-                                    room, selectedSeatIndex!);
+                              onPressed: () async {
+                                // Add 'async' keyword
+                                await roomRepository.deleteOneFromDatabase(room,
+                                    selectedSeatIndex!); // Add 'await' keyword
                                 setState(() {
                                   isUserUsingSeat = false;
                                 });
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text(
-                                        '이제 다른 좌석을 사용하실 수 있습니다 :)'),
+                                    content: Text('이제 다른 좌석을 사용하실 수 있습니다 :)'),
                                   ),
                                 );
+                                setState(() {});
                               },
                               child: const Text('떠나기'),
                             ),
@@ -238,9 +240,10 @@ class _RoomPageState extends State<RoomPage> {
                         : Center(
                             child: ElevatedButton(
                               // ...
-                              onPressed: () {
-                                roomRepository.addOneToDatabase(
-                                    room, selectedSeatIndex!);
+                              onPressed: () async {
+                                // Add 'async' keyword
+                                await roomRepository.addOneToDatabase(room,
+                                    selectedSeatIndex!); // Add 'await' keyword
                                 setState(() {
                                   isUserUsingSeat = true;
                                 });
@@ -250,7 +253,9 @@ class _RoomPageState extends State<RoomPage> {
                                         '해당 좌석을 사용하시면, 다른 좌석은 사용하실 수 없습니다.'),
                                   ),
                                 );
+                                setState(() {});
                               },
+
                               child: const Text('사용'),
                             ),
                           ))
