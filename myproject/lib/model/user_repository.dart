@@ -67,4 +67,19 @@ class UserRepository extends ChangeNotifier {
         .doc(roomName)
         .set({'index': _favoriteItems[roomName]});
   }
+
+  Future<int> getFavoriteSeats() async {
+   var col = await FirebaseFirestore.instance
+        .collection('users') // 'rooms' 컬렉션에 접근
+        .doc(user!.uid)
+        .collection('favorite') // 각 room의 'seats' 컬렉션에 접근
+        .get();
+
+    int length = 0;
+    for (var doc in col.docs) {
+      length += (doc.get('index') as List).length;
+    }
+    
+    return length;
+  }
 }

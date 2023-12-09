@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:myproject/config/theme.dart';
 import 'dart:math' as math;
 import 'package:permission_handler/permission_handler.dart' as ph;
+import 'package:myproject/view/widget/compass.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -34,6 +35,9 @@ class _LocationState extends State<LocationPage> {
     super.dispose();
   }
 
+  double distance = .0;
+  double bearing = .0;
+
   void getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -55,10 +59,12 @@ class _LocationState extends State<LocationPage> {
 
     _locationData = await location.getLocation();
 
-    double distance = calculateDistance(_locationData.latitude!,
+    setState(() {
+      distance = calculateDistance(_locationData.latitude!,
         _locationData.longitude!, 36.1028509, 129.387156);
-    double bearing = calculateBearing(_locationData.latitude!,
-        _locationData.longitude!, 36.1028509, 129.387156);
+      bearing = calculateBearing(_locationData.latitude!,
+          _locationData.longitude!, 36.1028509, 129.387156);
+    });
 
     setState(() {
       String direction = getDirection(bearing);
@@ -120,7 +126,7 @@ class _LocationState extends State<LocationPage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(30.0, 15.0, 15.0, 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -131,10 +137,17 @@ class _LocationState extends State<LocationPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(
+                height: 15,
+              ),
               Image.network(
                 'https://images.unsplash.com/photo-1660568704661-8f11a707784b?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                width: 500,
-                height: 400,
+                fit: BoxFit.cover,
+                width: 400,
+                height: 150,
+              ),
+              const SizedBox(
+                height: 20,
               ),
               Container(
                 padding: const EdgeInsets.all(5.0),
@@ -144,6 +157,7 @@ class _LocationState extends State<LocationPage> {
                   style: const TextStyle(fontSize: 16.0, color: Colors.black),
                 ),
               ),
+              Expanded(child: Compass(direction: bearing)),
             ],
           ),
         ),

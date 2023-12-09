@@ -123,19 +123,8 @@ class RoomRepository extends ChangeNotifier {
   }
 
   int getUsingNum(String roomName) {
-    int totalNum = 0;
     Room room = getRoom(roomName);
 
-    print(roomName);
-    for (var row in room.seats) {
-      for (var seat in row) {
-        if (seat.exist) {
-           totalNum += 1;
-        }
-      }
-    }
-
-    int usingNum = room.offsets.length - totalNum;
-    return usingNum;
+    return room.totalSeats - room.seatList.where((seat) => seat.using).length;
   }
 }

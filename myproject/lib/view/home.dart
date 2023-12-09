@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myproject/model/room_repository.dart';
 import 'package:provider/provider.dart';
+import 'package:myproject/model/user_repository.dart';
 
 // final roomRepo = RoomRepository();
 
@@ -16,6 +17,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
+  int favoriteLength = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      UserRepository userRepo = Provider.of<UserRepository>(context, listen: false);
+      favoriteLength = await userRepo.getFavoriteSeats(); 
+      setState(() {});
+    });
+  }
 
   Widget _buildRoomCard(BuildContext context, Room room) {
     RoomRepository roomRepo = Provider.of<RoomRepository>(context);
@@ -61,10 +73,10 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('사용 가능'),
-                          // Text(
-                          //   '${roomRepo.getUsingNum(room.name)}',
-                          //   style: TextStyle(fontSize: 20),
-                          // ),
+                          Text(
+                            '${roomRepo.getUsingNum(room.name)}',
+                            style: TextStyle(fontSize: 20),
+                          ),
                         ],
                       ),
                       const SizedBox(width: 20),
@@ -169,6 +181,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserRepository userRepo = Provider.of<UserRepository>(context);
+
     return Scaffold(
       drawer: _buildDrawer(context),
       appBar: AppBar(
@@ -234,10 +248,10 @@ class _HomePageState extends State<HomePage> {
                       color: MyColorTheme.primary.withOpacity(.3),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text(
                             '즐겨찾기',
@@ -247,29 +261,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text('사용 가능'),
-                                Text(
-                                  '8',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                            SizedBox(width: 50),
-                            Column(
-                              children: [
-                                Text('전체 자리'),
-                                Text(
-                                  '15',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ],
-                            ),
-                          ],
+                        Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text('전체 자리'),
+                              Text(
+                                '$favoriteLength',
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

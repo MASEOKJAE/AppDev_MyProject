@@ -10,6 +10,8 @@ abstract class Room {
   late List<List<Seat>> seats;
   int get totalSeats => offsets.length;
 
+  List<Seat> get seatList => seats.expand((x) => x).toList();
+
   Seat? getSeat(int? index) {
     if (index == null) return null;
     int x = offsets[index - 1].dx.toInt();

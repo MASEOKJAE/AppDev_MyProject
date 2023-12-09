@@ -33,20 +33,21 @@ class LocalNotification {
 
   static void requestNotificationPermission() {
     print("권한 요청 중!");
-    localNotificationsPlugin.resolvePlatformSpecificImplementation<
+    localNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   static Future<void> scheduleNotification(DateTime scheduledTime) async {
     int notificationId = 0; // You can use a unique id for each notification
 
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
+        const AndroidNotificationDetails(
       'channel id',
       'channel name',
       channelDescription: 'channel description',
@@ -57,14 +58,14 @@ class LocalNotification {
 
     NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
-      iOS: DarwinNotificationDetails(badgeNumber: 1),
+      iOS: const DarwinNotificationDetails(badgeNumber: 1),
     );
 
     Duration timeDifference = scheduledTime.difference(DateTime.now());
     int minutesDifference = timeDifference.inMinutes;
 
     String notificationMessage =
-        '목표 시간까지 ${minutesDifference ~/ 60}시간 ${minutesDifference % 60}분 남았습니다! 힘내세요 :)';
+        '목표 시간까지 ${minutesDifference ~/ 60}시간 ${minutesDifference % 60}분동안 잘해셨네요! 멋져요 :)';
 
     await localNotificationsPlugin.zonedSchedule(
       notificationId,
