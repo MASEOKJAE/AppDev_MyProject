@@ -62,6 +62,17 @@ class _MotivationState extends State<MotivationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                '공부 알람 예약',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Image.network(
                 imageUrl,
                 width: 200,
@@ -77,10 +88,27 @@ class _MotivationState extends State<MotivationPage> {
                 child: const Text('목표 시간 선택'),
               ),
               const SizedBox(
-                height: 50,
+                height: 30,
               ),
+
+              divder,
+
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                '스탑 워치',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+
               SizedBox(
-                height: 200, // Set a fixed height
+                height: 150, // Set a fixed height
                 width: 300, // Set a fixed width
                 // color: Colors.blueGrey, // Set a color to see the container
                 child: _stopWatchWidget,
@@ -89,9 +117,18 @@ class _MotivationState extends State<MotivationPage> {
               divder,
 
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
-
+              const Text(
+                '동기 부여 영상',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: _searchResults.length,
