@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -113,7 +114,7 @@ class CompassState extends State<Compass> {
             ),
             child: Transform.rotate(
               angle: ((direction + widget.direction) * (math.pi / 180) * -1),
-              child: Image.asset('assets/compass.jpg'),
+              child: SvgPicture.asset('assets/compass.svg'),
             ),
           ),
         );

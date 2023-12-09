@@ -53,7 +53,7 @@ class _FavoriteState extends State<FavoritePage> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 5.0),
                   child: CircleAvatar(
-                    backgroundColor: isAvailable ? Colors.green : Colors.red,
+                    backgroundColor: isAvailable ? Colors.green : Colors.green,
                     child: Text(
                       seatIndex,
                       style: const TextStyle(color: Colors.white),
