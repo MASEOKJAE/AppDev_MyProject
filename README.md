@@ -1,4 +1,4 @@
-# 📚 열람실 사석화 방지 시스템 (Anti-Seat-Hogging App)
+# 📚 열람실 사석화 방지 시스템 (Hot Spot)
 
 > Flutter 기반으로 개발된 **실시간 좌석 정보 제공 & 사석화 방지 앱**
 > 
@@ -218,7 +218,7 @@ Google 로그인 → Home Page 이동, SVG 로고 렌더링 적용
 
 | 이름 | 역할 |
 |------|------|
-| 마석재 | 전체 로직 & UI, Firebase 구조 설계, Provider 상태관리, 알림 구현 |
+| 마석재 | 팀장, 전체 로직 & UI, Firebase 구조 설계, Provider 상태관리, 알림 구현 |
 | 이희준 | YouTube API, GPS + 나침반 기능 구현 |
 
 ### 💬 마석재
